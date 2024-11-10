@@ -1,5 +1,13 @@
 import { ErapiApiCallHandler } from "./types";
 
+const idToSoundType: Record<number, "sfx" | "music"> = {
+  34: "music",
+  58: "music",
+  59: "music",
+  755: "sfx",
+  756: "sfx",
+};
+
 const rst8ApiCallHandler: Record<number, ErapiApiCallHandler> = {
   [0x0]: {
     /**
@@ -69,6 +77,10 @@ const rst8ApiCallHandler: Record<number, ErapiApiCallHandler> = {
      * hl = sound id
      */
     functionName: "PlaySystemSound",
+    handle(state, _memory, _handleGenerator, erapiState) {
+      const id = (state.h << 8) | state.l;
+      erapiState.sounds.push({ id, type: idToSoundType[id] });
+    },
   },
   [0x7]: {
     /**

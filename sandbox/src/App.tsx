@@ -8,16 +8,24 @@ async function loadBinary(url: string): Promise<Uint8Array> {
   return new Uint8Array(data);
 }
 
+type EmulationState = "not-started" | "running" | "paused";
+
+const buttonLabel: Record<EmulationState, string> = {
+  "not-started": "start",
+  running: "pause",
+  paused: "resume",
+};
+
 function App() {
   const [emulator, setEmulator] = useState<EreaderEmulator | null>(null);
-  const [running, setRunning] = useState(true);
+  const [emulationState, setEmulationState] =
+    useState<EmulationState>("not-started");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     async function onCanvas(canvas: HTMLCanvasElement) {
       const binData = await loadBinary("/main.bin");
       const emulator = new EreaderEmulator(binData, canvas);
-      emulator.run();
       setEmulator(emulator);
     }
 
@@ -40,17 +48,18 @@ function App() {
       />
       <button
         onClick={() => {
-          setRunning((r) => {
-            if (r) {
+          setEmulationState((r) => {
+            if (r === "running") {
               emulator!.pause();
+              return "paused";
             } else {
               emulator!.run();
+              return "running";
             }
-            return !r;
           });
         }}
       >
-        {running ? "pause" : "resume"}
+        {buttonLabel[emulationState]}
       </button>
     </div>
   );

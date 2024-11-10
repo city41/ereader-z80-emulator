@@ -1,5 +1,5 @@
 import { ERAPI } from "./ERAPI/ERAPI";
-import { renderFrame } from "./Screen";
+import { renderFrame } from "./screen";
 import { SimulatedMemory } from "./SimulatedMemory";
 import * as Z80 from "./Z80";
 import { Z80Core, Z80State } from "./types";

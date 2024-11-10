@@ -1,12 +1,14 @@
+import { playSound } from "../sound";
 import { SimulatedMemory } from "../SimulatedMemory";
 import { Z80State } from "../types";
 import { rst0ApiCallHandler } from "./rst0ApiCallHandlers";
 import { rst8ApiCallHandler } from "./rst8ApiCallHandlers";
-import { ERAPIBackground, ERAPICustomSprite } from "./types";
+import { ERAPIBackground, ERAPICustomSprite, ERAPISystemSound } from "./types";
 
 class ERAPI {
   public backgrounds: ERAPIBackground[] = [];
   public sprites: ERAPICustomSprite[] = [];
+  public sounds: ERAPISystemSound[] = [];
 
   private updateSprite(sprite: ERAPICustomSprite) {
     if (sprite.autoAnimate) {
@@ -80,6 +82,9 @@ class ERAPI {
 
   update() {
     this.sprites.forEach((s) => this.updateSprite(s));
+
+    this.sounds.forEach((s) => playSound(s));
+    this.sounds = [];
   }
 }
 

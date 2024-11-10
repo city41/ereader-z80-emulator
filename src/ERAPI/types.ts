@@ -56,9 +56,15 @@ export type ERAPICustomSprite = ERAPIBaseSprite & {
   paletteNumber: number;
 };
 
+export type ERAPISystemSound = {
+  type: "sfx" | "music";
+  id: number;
+};
+
 export type ERAPIState = {
   backgrounds: ERAPIBackground[];
   sprites: ERAPICustomSprite[];
+  sounds: ERAPISystemSound[];
 };
 
 export type ErapiApiCallHandler = {
