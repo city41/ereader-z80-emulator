@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EreaderEmulator } from "../../EreaderEmulator";
 
 async function loadBinary(url: string): Promise<Uint8Array> {
@@ -9,16 +9,16 @@ async function loadBinary(url: string): Promise<Uint8Array> {
 }
 
 function App() {
+  const [emulator, setEmulator] = useState<EreaderEmulator | null>(null);
+  const [running, setRunning] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     async function onCanvas(canvas: HTMLCanvasElement) {
       const binData = await loadBinary("/main.bin");
-      const emulator = new EreaderEmulator(binData);
-
-      while (true) {
-        await emulator.frame(canvas);
-      }
+      const emulator = new EreaderEmulator(binData, canvas);
+      emulator.run();
+      setEmulator(emulator);
     }
 
     if (canvasRef.current) {
@@ -38,6 +38,20 @@ function App() {
           imageRendering: "pixelated",
         }}
       />
+      <button
+        onClick={() => {
+          setRunning((r) => {
+            if (r) {
+              emulator!.pause();
+            } else {
+              emulator!.run();
+            }
+            return !r;
+          });
+        }}
+      >
+        {running ? "pause" : "resume"}
+      </button>
     </div>
   );
 }

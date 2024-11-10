@@ -215,6 +215,8 @@ const rst0ApiCallHandler: Record<number, ErapiApiCallHandler> = {
         sprite.autoAnimate = {
           frameDuration,
           animationDuration,
+          curFrameCount: 0,
+          curAnimationCount: 0,
         };
       }
     },

@@ -38,6 +38,8 @@ export type ERAPIBaseSprite = {
   autoAnimate?: {
     frameDuration: number;
     animationDuration: number;
+    curFrameCount: number;
+    curAnimationCount: number;
   };
 };
 

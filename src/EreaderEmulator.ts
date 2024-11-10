@@ -4,15 +4,21 @@ import { SimulatedMemory } from "./SimulatedMemory";
 import * as Z80 from "./Z80";
 import { Z80Core, Z80State } from "./types";
 
+type EmulationState = "stopped" | "running";
+
 class EreaderEmulator implements Z80Core {
   private z80: any;
   private erapi: ERAPI;
   private memory: SimulatedMemory;
   private handleCounter = 1;
+  private framesToRender = 0;
+  private emulationState: EmulationState = "stopped";
+  private canvas: HTMLCanvasElement;
 
   private handleGenerator: () => number;
 
-  constructor(game: Uint8Array) {
+  constructor(game: Uint8Array, canvas: HTMLCanvasElement) {
+    this.canvas = canvas;
     this.z80 = new (Z80 as any).Z80(this);
     this.memory = new SimulatedMemory();
     this.memory.writeBlock(0x100, game);
@@ -66,32 +72,57 @@ class EreaderEmulator implements Z80Core {
     return newState;
   }
 
-  private async wait(millis: number): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(resolve, millis);
-    });
-  }
+  private frame() {
+    this.erapi.update();
+    renderFrame(this.canvas, this.erapi);
+    this.framesToRender -= 1;
 
-  async frame(canvas: HTMLCanvasElement): Promise<void> {
-    this.z80.run_instruction();
-
-    if (this.z80.halted) {
+    if (this.framesToRender > 0) {
+      requestAnimationFrame(() => {
+        this.frame();
+      });
+    } else {
       const state = this.z80.getState();
-
-      for (let i = 0; i < Math.max(state.a, 1); i += 1) {
-        const start = Date.now();
-        this.erapi.update();
-        renderFrame(canvas, this.erapi);
-        const duration = Date.now() - start;
-        if (duration < 20) {
-          await this.wait(20 - duration);
-        }
-      }
-
       state.pc += 1;
       state.halted = false;
       this.z80.setState(state);
+
+      if (this.emulationState === "running") {
+        requestAnimationFrame(() => {
+          this.step();
+        });
+      }
     }
+  }
+
+  step() {
+    while (!this.z80.halted) {
+      this.z80.run_instruction();
+    }
+
+    this.framesToRender = Math.max(this.z80.getState().a, 1);
+
+    requestAnimationFrame(() => {
+      this.frame();
+    });
+  }
+
+  run() {
+    this.emulationState = "running";
+    this.step();
+  }
+
+  pause() {
+    this.emulationState = "stopped";
+  }
+
+  reset() {
+    const state = this.z80.getState();
+    state.pc = 0x100;
+    state.halted = false;
+    this.z80.setState(state);
+
+    this.run();
   }
 }
 

@@ -8,6 +8,27 @@ class ERAPI {
   public backgrounds: ERAPIBackground[] = [];
   public sprites: ERAPICustomSprite[] = [];
 
+  private updateSprite(sprite: ERAPICustomSprite) {
+    if (sprite.autoAnimate) {
+      sprite.autoAnimate.curAnimationCount += 1;
+
+      if (
+        sprite.autoAnimate.curAnimationCount >=
+        sprite.autoAnimate.animationDuration
+      ) {
+        delete sprite.autoAnimate;
+      } else {
+        sprite.autoAnimate.curFrameCount += 1;
+        if (
+          sprite.autoAnimate.curFrameCount >= sprite.autoAnimate.frameDuration
+        ) {
+          sprite.currentFrame = (sprite.currentFrame + 1) % sprite.frames;
+          sprite.autoAnimate.curFrameCount = 0;
+        }
+      }
+    }
+  }
+
   rst0(
     apiCallId: number,
     state: Z80State,
@@ -58,7 +79,7 @@ class ERAPI {
   }
 
   update() {
-    // TODO: things like scrolling backgrounds, auto animations, etc
+    this.sprites.forEach((s) => this.updateSprite(s));
   }
 }
 
