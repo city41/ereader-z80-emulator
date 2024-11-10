@@ -66,7 +66,7 @@ function App() {
   }, []);
 
   return (
-    <div style={{ width: "50%" }}>
+    <div className="w-full sm:w-1/2 sm:mx-auto">
       <canvas
         ref={canvasRef}
         width={240}
