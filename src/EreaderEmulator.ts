@@ -124,6 +124,49 @@ class EreaderEmulator implements Z80Core {
 
     this.run();
   }
+
+  keyToBitMask: Record<string, number> = {
+    a: 0x0001,
+    b: 0x0002,
+    select: 0x0004,
+    start: 0x0008,
+    right: 0x0010,
+    left: 0x0020,
+    up: 0x0040,
+    down: 0x0080,
+    r: 0x0100,
+    l: 0x0200,
+  };
+
+  keyWord = 0;
+
+  public onKeyDown(key: string) {
+    const bitMask = this.keyToBitMask[key];
+
+    if (bitMask) {
+      this.keyWord |= bitMask;
+
+      const highByte = this.keyWord >> 8;
+      const lowByte = this.keyWord & 0xff;
+
+      this.memory.write8(0xc4, lowByte);
+      this.memory.write8(0xc5, highByte);
+    }
+  }
+
+  public onKeyUp(key: string) {
+    const bitMask = this.keyToBitMask[key];
+
+    if (bitMask) {
+      this.keyWord &= ~bitMask;
+
+      const highByte = this.keyWord >> 8;
+      const lowByte = this.keyWord & 0xf;
+
+      this.memory.write8(0xc4, lowByte);
+      this.memory.write8(0xc5, highByte);
+    }
+  }
 }
 
 export { EreaderEmulator };

@@ -10,6 +10,19 @@ async function loadBinary(url: string): Promise<Uint8Array> {
 
 type EmulationState = "not-started" | "running" | "paused";
 
+const keyMapping: Record<string, string> = {
+  ArrowLeft: "left",
+  ArrowRight: "right",
+  ArrowDown: "down",
+  ArrowUp: "up",
+  z: "b",
+  x: "a",
+  a: "l",
+  s: "s",
+  q: "select",
+  w: "start",
+};
+
 const buttonLabel: Record<EmulationState, string> = {
   "not-started": "start",
   running: "pause",
@@ -27,6 +40,24 @@ function App() {
       const binData = await loadBinary("/main.bin");
       const emulator = new EreaderEmulator(binData, canvas);
       setEmulator(emulator);
+
+      window.addEventListener("keydown", (e) => {
+        const mappedKey = keyMapping[e.key];
+
+        if (mappedKey) {
+          e.preventDefault();
+          emulator.onKeyDown(mappedKey);
+        }
+      });
+
+      window.addEventListener("keyup", (e) => {
+        const mappedKey = keyMapping[e.key];
+
+        if (mappedKey) {
+          e.preventDefault();
+          emulator.onKeyUp(mappedKey);
+        }
+      });
     }
 
     if (canvasRef.current) {
