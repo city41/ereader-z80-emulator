@@ -168,7 +168,6 @@ function createBackgroundTiles(bg: ERAPICustomBackground): HTMLCanvasElement[] {
   if (cachedBgTiles) {
     return cachedBgTiles;
   }
-  console.log("background tiles cache miss", bg.tileHash);
 
   const tiles = drawBackgroundTiles(bg.tiles, bg.palettes);
 
@@ -183,7 +182,6 @@ function createCustomBackground(bg: ERAPICustomBackground): HTMLCanvasElement {
   if (cachedBg) {
     return cachedBg;
   }
-  console.log("background cache miss", bg.fullHash);
 
   const tiles = createBackgroundTiles(bg);
 
@@ -218,18 +216,19 @@ function drawSprite(sprite: ERAPICustomSprite): HTMLCanvasElement {
 }
 
 function createCustomSprite(sprite: ERAPICustomSprite): HTMLCanvasElement {
-  const cachedSprite = spriteCache[`${sprite.handle}-${sprite.currentFrame}`];
+  const cachedSprite =
+    spriteCache[`${sprite.tilePaletteHash}-${sprite.currentFrame}`];
 
   if (!cachedSprite) {
     // when caching, cache all the frames
     for (let i = 0; i < sprite.frames; ++i) {
       const spriteAtFrame = { ...sprite, currentFrame: i };
       const spriteCanvas = drawSprite(spriteAtFrame);
-      spriteCache[`${sprite.handle}-${i}`] = spriteCanvas;
+      spriteCache[`${sprite.tilePaletteHash}-${i}`] = spriteCanvas;
     }
   }
 
-  return spriteCache[`${sprite.handle}-${sprite.currentFrame}`];
+  return spriteCache[`${sprite.tilePaletteHash}-${sprite.currentFrame}`];
 }
 
 function renderFrame(canvas: HTMLCanvasElement, state: ERAPIState) {

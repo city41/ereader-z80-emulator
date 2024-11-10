@@ -305,6 +305,7 @@ const rst0ApiCallHandler: Record<number, ErapiApiCallHandler> = {
         frames,
         tiles,
         palette,
+        tilePaletteHash: hash(tiles.concat(palette)),
         paletteNumber: state.e,
         visible: false,
         currentFrame: 0,

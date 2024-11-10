@@ -52,6 +52,7 @@ export type ERAPICustomSprite = ERAPIBaseSprite & {
   type: "custom";
   tiles: number[];
   palette: number[];
+  tilePaletteHash: string;
   paletteNumber: number;
 };
 
