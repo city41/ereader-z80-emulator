@@ -2,9 +2,12 @@ import {
   ERAPICustomBackground,
   ERAPICustomSprite,
   ERAPIState,
+  ERAPISystemBackground,
 } from "./ERAPI/types";
+import { systemBgs } from "./systemBackgrounds";
 
-const backgroundCache: Record<string, HTMLCanvasElement> = {};
+const customBackgroundCache: Record<string, HTMLCanvasElement> = {};
+const systemBackgroundCache: Record<string, HTMLImageElement> = {};
 const backgroundTileCache: Record<string, HTMLCanvasElement[]> = {};
 const spriteCache: Record<string, HTMLCanvasElement> = {};
 
@@ -177,7 +180,7 @@ function createBackgroundTiles(bg: ERAPICustomBackground): HTMLCanvasElement[] {
 }
 
 function createCustomBackground(bg: ERAPICustomBackground): HTMLCanvasElement {
-  const cachedBg = backgroundCache[bg.fullHash];
+  const cachedBg = customBackgroundCache[bg.fullHash];
 
   if (cachedBg) {
     return cachedBg;
@@ -187,9 +190,32 @@ function createCustomBackground(bg: ERAPICustomBackground): HTMLCanvasElement {
 
   const bgCanvas = drawBackground(bg.map, tiles);
 
-  backgroundCache[bg.fullHash] = bgCanvas;
+  customBackgroundCache[bg.fullHash] = bgCanvas;
 
   return bgCanvas;
+}
+
+function createSystemBackground(
+  bg: ERAPISystemBackground
+): HTMLImageElement | null {
+  const cachedBg = systemBackgroundCache[bg.backgroundId];
+
+  if (cachedBg) {
+    return cachedBg;
+  }
+
+  const src = systemBgs[bg.backgroundId];
+
+  if (!src) {
+    return null;
+  }
+
+  const image = new Image();
+  image.src = systemBgs[bg.backgroundId];
+
+  systemBackgroundCache[bg.backgroundId] = image;
+
+  return image;
 }
 
 function drawSprite(sprite: ERAPICustomSprite): HTMLCanvasElement {
@@ -237,12 +263,18 @@ function renderFrame(canvas: HTMLCanvasElement, state: ERAPIState) {
   context.fillStyle = "green";
   context.fillRect(0, 0, canvas.width, canvas.height);
 
-  state.backgrounds.forEach((bg) => {
+  for (let i = state.backgrounds.length - 1; i >= 0; --i) {
+    const bg = state.backgrounds[i];
     if (bg.type === "custom") {
       const bgCanvas = createCustomBackground(bg);
       context.drawImage(bgCanvas, 0, 0);
+    } else if (bg.type === "system") {
+      const systemBg = createSystemBackground(bg);
+      if (systemBg) {
+        context.drawImage(systemBg, 0, 0);
+      }
     }
-  });
+  }
 
   state.sprites.forEach((sprite) => {
     // always create the sprite. this lets us load up and get ready for
