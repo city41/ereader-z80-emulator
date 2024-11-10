@@ -23,16 +23,13 @@ const keyMapping: Record<string, string> = {
   w: "start",
 };
 
-const buttonLabel: Record<EmulationState, string> = {
-  "not-started": "start",
-  running: "pause",
-  paused: "resume",
-};
+function Button(props: JSX.IntrinsicElements["button"]) {
+  return <button {...props} className="border border-black p-2 m-2" />;
+}
 
 function App() {
   const [emulator, setEmulator] = useState<EreaderEmulator | null>(null);
-  const [emulationState, setEmulationState] =
-    useState<EmulationState>("not-started");
+  const [, setEmulationState] = useState<EmulationState>("not-started");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -76,8 +73,6 @@ function App() {
           height: "auto",
           imageRendering: "pixelated",
         }}
-      />
-      <button
         onClick={() => {
           setEmulationState((r) => {
             if (r === "running") {
@@ -89,9 +84,67 @@ function App() {
             }
           });
         }}
+      />
+      <Button
+        onClick={() => {
+          emulator?.onKeyDown("up");
+          setTimeout(() => {
+            emulator?.onKeyUp("up");
+          }, 20);
+        }}
       >
-        {buttonLabel[emulationState]}
-      </button>
+        up
+      </Button>
+      <Button
+        onClick={() => {
+          emulator?.onKeyDown("down");
+          setTimeout(() => {
+            emulator?.onKeyUp("down");
+          }, 20);
+        }}
+      >
+        down
+      </Button>
+      <Button
+        onClick={() => {
+          emulator?.onKeyDown("left");
+          setTimeout(() => {
+            emulator?.onKeyUp("left");
+          }, 20);
+        }}
+      >
+        left
+      </Button>
+      <Button
+        onClick={() => {
+          emulator?.onKeyDown("right");
+          setTimeout(() => {
+            emulator?.onKeyUp("right");
+          }, 20);
+        }}
+      >
+        right
+      </Button>
+      <Button
+        onClick={() => {
+          emulator?.onKeyDown("b");
+          setTimeout(() => {
+            emulator?.onKeyUp("b");
+          }, 20);
+        }}
+      >
+        B
+      </Button>
+      <Button
+        onClick={() => {
+          emulator?.onKeyDown("a");
+          setTimeout(() => {
+            emulator?.onKeyUp("a");
+          }, 20);
+        }}
+      >
+        A
+      </Button>
     </div>
   );
 }
