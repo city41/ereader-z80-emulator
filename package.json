@@ -21,7 +21,7 @@
     "vite": "^5.4.10"
   },
   "scripts": {
-    "sandbox-dev": "yarn vite src/sandbox",
+    "sandbox-dev": "yarn vite sandbox",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { EreaderEmulator } from "../../EreaderEmulator";
+import { EreaderEmulator } from "../../src/EreaderEmulator";
 
 async function loadBinary(url: string): Promise<Uint8Array> {
   const result = await fetch(url);

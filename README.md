@@ -38,9 +38,9 @@ for (let i = 0; i < 100; ++i) {
 
 ## Sandbox
 
-In `src/sandbox` is a simple implementation of the emulator. To use:
+In `sandbox` is a simple implementation of the emulator. To use:
 
 1. `yarn install` at the root of the repo
-2. Get a `.bin` file and place it at `src/sandbox/public/main.bin`
+2. Get a `.bin` file and place it at `sandbox/public/main.bin`
 3. `yarn sandbox-dev`
 4. visit `http://localhost:5173`
