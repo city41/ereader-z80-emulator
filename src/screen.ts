@@ -294,4 +294,12 @@ function renderFrame(canvas: HTMLCanvasElement, state: ERAPIState) {
   });
 }
 
-export { renderFrame };
+function preloadSprite(sprite: ERAPICustomSprite) {
+  createCustomSprite(sprite);
+}
+
+function preloadCustomBackground(bg: ERAPICustomBackground) {
+  createCustomBackground(bg);
+}
+
+export { renderFrame, preloadSprite, preloadCustomBackground };

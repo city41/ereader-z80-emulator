@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { EreaderEmulator } from "../../src/EreaderEmulator";
 import { OnscreenControls } from "./OnscreenControls";
@@ -9,7 +10,11 @@ async function loadBinary(url: string): Promise<Uint8Array> {
   return new Uint8Array(data);
 }
 
-type EmulationState = "not-started" | "running" | "paused";
+type EmulationState = "ready-to-start" | "preloading" | "running" | "paused";
+
+// this is assuming the sandbox is running solitaire
+const DECK_SPRITE = 0x4766;
+const PLAYFIELD_BG = 0x3a3e;
 
 const keyMapping: Record<string, string> = {
   ArrowLeft: "left",
@@ -24,13 +29,10 @@ const keyMapping: Record<string, string> = {
   w: "start",
 };
 
-function Button(props: JSX.IntrinsicElements["button"]) {
-  return <button {...props} className="border border-black p-2 m-2" />;
-}
-
 function App() {
   const [emulator, setEmulator] = useState<EreaderEmulator | null>(null);
-  const [, setEmulationState] = useState<EmulationState>("not-started");
+  const [emulationState, setEmulationState] =
+    useState<EmulationState>("preloading");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -38,6 +40,15 @@ function App() {
       const binData = await loadBinary("/main.bin");
       const emulator = new EreaderEmulator(binData, canvas);
       setEmulator(emulator);
+
+      emulator
+        .preload({
+          sprites: [DECK_SPRITE],
+          customBackgrounds: [PLAYFIELD_BG],
+        })
+        .then(() => {
+          setEmulationState("ready-to-start");
+        });
 
       window.addEventListener("keydown", (e) => {
         const mappedKey = keyMapping[e.key];
@@ -64,37 +75,57 @@ function App() {
   }, []);
 
   return (
-    <div className="w-full h-full sm:w-1/2 sm:mx-auto">
-      <canvas
-        ref={canvasRef}
-        width={240}
-        height={160}
-        style={{
-          width: "100%",
-          height: "auto",
-          imageRendering: "pixelated",
-        }}
-        onClick={() => {
-          setEmulationState((r) => {
-            if (r === "running") {
-              emulator!.pause();
-              return "paused";
-            } else {
-              emulator!.run();
-              return "running";
-            }
-          });
-        }}
-      />
-      <OnscreenControls
-        onKeyDown={(key) => {
-          emulator?.onKeyDown(key);
-        }}
-        onKeyUp={(key) => {
-          emulator?.onKeyUp(key);
-        }}
-      />
-    </div>
+    <>
+      <div className="w-full h-full sm:w-1/2 sm:mx-auto">
+        <div
+          className={clsx("border border-black", {
+            relative:
+              emulationState === "preloading" ||
+              emulationState === "ready-to-start",
+          })}
+        >
+          {(emulationState === "preloading" ||
+            emulationState === "ready-to-start") && (
+            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none grid place-items-center text-2xl">
+              <div>
+                {emulationState === "preloading"
+                  ? "Loading..."
+                  : "Ready, tap here to start"}
+              </div>
+            </div>
+          )}
+          <canvas
+            ref={canvasRef}
+            width={240}
+            height={160}
+            style={{
+              width: "100%",
+              height: "auto",
+              imageRendering: "pixelated",
+            }}
+            onClick={() => {
+              setEmulationState((r) => {
+                if (r === "running") {
+                  emulator!.pause();
+                  return "paused";
+                } else {
+                  emulator!.run();
+                  return "running";
+                }
+              });
+            }}
+          />
+        </div>
+        <OnscreenControls
+          onKeyDown={(key) => {
+            emulator?.onKeyDown(key);
+          }}
+          onKeyUp={(key) => {
+            emulator?.onKeyUp(key);
+          }}
+        />
+      </div>
+    </>
   );
 }
 

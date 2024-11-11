@@ -38,7 +38,7 @@ async function main(systemBgDir: string, outPath: string) {
   }
 
   const entries = Object.entries(dataUrls).map((e) => {
-    return `    ${e[0]}: "${e[1]},"`;
+    return `    ${e[0]}: "${e[1]}",`;
   });
 
   const src = SRC_TEMPLATE.replace("%%ENTRIES%%", entries.join("\n"));

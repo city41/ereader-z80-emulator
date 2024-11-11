@@ -31,6 +31,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "sha256-uint8array": "^0.10.7"
   }
 }

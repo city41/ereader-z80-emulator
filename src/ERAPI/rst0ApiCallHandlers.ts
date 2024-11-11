@@ -1,16 +1,6 @@
-import {
-  ERAPIBackground,
-  ERAPICustomSprite,
-  ErapiApiCallHandler,
-} from "./types";
-import { createHash } from "sha256-uint8array";
-
-function hash(data: number[]): string {
-  const uint8Hash = createHash().update(Uint8Array.from(data)).digest();
-  return Array.from(uint8Hash)
-    .map((b) => String.fromCharCode(b))
-    .join("");
-}
+import { extractCustomBackground } from "./backgrounds";
+import { extractSprite } from "./sprites";
+import { ERAPIBackground, ErapiApiCallHandler } from "./types";
 
 const BYTES_PER_TILE = 32;
 const BYTES_PER_PALETTE = 32;
@@ -99,40 +89,10 @@ const rst0ApiCallHandler: Record<number, ErapiApiCallHandler> = {
       }
 
       const structPointer = (state.d << 8) | state.e;
-      const pointerToTiles = memory.getMemory16(structPointer);
-      const pointerToPalettes = memory.getMemory16(structPointer + 2);
-      const pointerToMap = memory.getMemory16(structPointer + 4);
-      const numberOfTiles = memory.getMemory16(structPointer + 6);
-      const numberOfPalettes = memory.getMemory16(structPointer + 8);
 
-      const tileDataSize = numberOfTiles * BYTES_PER_TILE;
-      const palettesSize = numberOfPalettes * BYTES_PER_PALETTE;
+      const background = extractCustomBackground(structPointer, memory);
 
-      const tiles = Array.from(memory.readBlock(pointerToTiles, tileDataSize));
-
-      const palettes: number[] = [];
-
-      for (let i = 0; i < palettesSize; ++i) {
-        const paletteEntry = memory.getMemory16(pointerToPalettes + i * 2);
-        palettes.push(paletteEntry);
-      }
-
-      const map: number[] = [];
-
-      // TODO: 32x32 this is just what solitaire does...
-      for (let i = 0; i < 32 * 32; ++i) {
-        const mapEntry = memory.getMemory16(pointerToMap + i * 2);
-        map.push(mapEntry);
-      }
-
-      erapiState.backgrounds[state.a] = {
-        type: "custom",
-        tiles,
-        palettes,
-        map,
-        tileHash: hash(tiles),
-        fullHash: hash(tiles.concat(map, palettes)),
-      };
+      erapiState.backgrounds[state.a] = background;
     },
   },
   [0x30]: {
@@ -276,40 +236,13 @@ const rst0ApiCallHandler: Record<number, ErapiApiCallHandler> = {
     functionName: "SpriteCreate",
     handle(state, memory, handleGenerator, erapiState) {
       const spriteStructAddress = (state.h << 8) | state.l;
-      const tilePointer = memory.getMemory16(spriteStructAddress);
-      const palettePointer = memory.getMemory16(spriteStructAddress + 2);
-      const width = memory.read8(spriteStructAddress + 4);
-      const height = memory.read8(spriteStructAddress + 5);
-      const frames = memory.read8(spriteStructAddress + 6);
 
-      const tileDataSize = width * height * BYTES_PER_TILE * frames;
+      const sprite = extractSprite(spriteStructAddress, memory);
+      sprite.handle = handleGenerator();
+      sprite.paletteNumber = state.e;
 
-      const tiles = Array.from(memory.readBlock(tilePointer, tileDataSize));
-
-      const palette: number[] = [];
-
-      for (let i = 0; i < 16; ++i) {
-        const paletteEntry = memory.getMemory16(palettePointer + i * 2);
-        palette.push(paletteEntry);
-      }
-
-      const handle = handleGenerator();
-      state.h = handle >> 8;
-      state.l = handle & 0xff;
-
-      const sprite: ERAPICustomSprite = {
-        type: "custom",
-        handle,
-        width,
-        height,
-        frames,
-        tiles,
-        palette,
-        tilePaletteHash: hash(tiles.concat(palette)),
-        paletteNumber: state.e,
-        visible: false,
-        currentFrame: 0,
-      };
+      state.h = sprite.handle >> 8;
+      state.l = sprite.handle & 0xff;
 
       erapiState.sprites = erapiState.sprites.concat(sprite);
     },

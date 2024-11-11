@@ -1,10 +1,23 @@
 import { ERAPI } from "./ERAPI/ERAPI";
-import { renderFrame } from "./screen";
+import { preloadCustomBackground, preloadSprite, renderFrame } from "./screen";
 import { SimulatedMemory } from "./SimulatedMemory";
 import * as Z80 from "./Z80";
 import { Z80Core, Z80State } from "./types";
+import { extractSprite } from "./ERAPI/sprites";
+import { extractCustomBackground } from "./ERAPI/backgrounds";
 
 type EmulationState = "stopped" | "running";
+
+type EreaderEmulatorPreloadConfig = {
+  sprites: number[];
+  customBackgrounds: number[];
+};
+
+async function wait(millis: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, millis);
+  });
+}
 
 class EreaderEmulator implements Z80Core {
   private z80: any;
@@ -165,6 +178,22 @@ class EreaderEmulator implements Z80Core {
 
       this.memory.write8(0xc4, lowByte);
       this.memory.write8(0xc5, highByte);
+    }
+  }
+
+  public async preload(
+    preloadConfig: EreaderEmulatorPreloadConfig
+  ): Promise<void> {
+    for (const spriteAddress of preloadConfig.sprites) {
+      const sprite = extractSprite(spriteAddress, this.memory);
+      preloadSprite(sprite);
+      await wait(1);
+    }
+
+    for (const bgAddress of preloadConfig.customBackgrounds) {
+      const bg = extractCustomBackground(bgAddress, this.memory);
+      preloadCustomBackground(bg);
+      await wait(1);
     }
   }
 }
