@@ -1,0 +1,35 @@
+.left {
+  width: 0;
+  height: 0;
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+
+  border-right: 18px solid white;
+}
+
+.right {
+  width: 0;
+  height: 0;
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+
+  border-left: 18px solid white;
+}
+
+.up {
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+
+  border-bottom: 18px solid white;
+}
+
+.down {
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+
+  border-top: 18px solid white;
+}

@@ -76,9 +76,9 @@ function App() {
 
   return (
     <>
-      <div className="w-full h-full sm:w-1/2 sm:mx-auto">
+      <div className="w-full h-full sm:w-1/2 sm:mx-auto p-4 bg-orange-600 border-2 border-black rounded-xl overflow-hidden">
         <div
-          className={clsx("border border-black", {
+          className={clsx("border-8 border-black rounded-xl overflow-hidden", {
             relative:
               emulationState === "preloading" ||
               emulationState === "ready-to-start",
@@ -86,11 +86,11 @@ function App() {
         >
           {(emulationState === "preloading" ||
             emulationState === "ready-to-start") && (
-            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none grid place-items-center text-2xl">
+            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none grid place-items-center text-2xl bg-white">
               <div>
                 {emulationState === "preloading"
                   ? "Loading..."
-                  : "Ready, tap here to start"}
+                  : "Ready! Tap here or press a gamepad button to start"}
               </div>
             </div>
           )}
@@ -106,10 +106,10 @@ function App() {
             onClick={() => {
               setEmulationState((r) => {
                 if (r === "running") {
-                  emulator!.pause();
+                  emulator?.pause();
                   return "paused";
                 } else {
-                  emulator!.run();
+                  emulator?.run();
                   return "running";
                 }
               });
@@ -118,6 +118,12 @@ function App() {
         </div>
         <OnscreenControls
           onKeyDown={(key) => {
+            if (emulationState === "ready-to-start") {
+              setEmulationState((r) => {
+                emulator?.run();
+                return "running";
+              });
+            }
             emulator?.onKeyDown(key);
           }}
           onKeyUp={(key) => {
