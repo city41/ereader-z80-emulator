@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { EreaderEmulator } from "../../src/EreaderEmulator";
+import { OnscreenControls } from "./OnscreenControls";
 
 async function loadBinary(url: string): Promise<Uint8Array> {
   const result = await fetch(url);
@@ -63,7 +64,7 @@ function App() {
   }, []);
 
   return (
-    <div className="w-full sm:w-1/2 sm:mx-auto">
+    <div className="w-full h-full sm:w-1/2 sm:mx-auto">
       <canvas
         ref={canvasRef}
         width={240}
@@ -85,66 +86,14 @@ function App() {
           });
         }}
       />
-      <Button
-        onClick={() => {
-          emulator?.onKeyDown("up");
-          setTimeout(() => {
-            emulator?.onKeyUp("up");
-          }, 20);
+      <OnscreenControls
+        onKeyDown={(key) => {
+          emulator?.onKeyDown(key);
         }}
-      >
-        up
-      </Button>
-      <Button
-        onClick={() => {
-          emulator?.onKeyDown("down");
-          setTimeout(() => {
-            emulator?.onKeyUp("down");
-          }, 20);
+        onKeyUp={(key) => {
+          emulator?.onKeyUp(key);
         }}
-      >
-        down
-      </Button>
-      <Button
-        onClick={() => {
-          emulator?.onKeyDown("left");
-          setTimeout(() => {
-            emulator?.onKeyUp("left");
-          }, 20);
-        }}
-      >
-        left
-      </Button>
-      <Button
-        onClick={() => {
-          emulator?.onKeyDown("right");
-          setTimeout(() => {
-            emulator?.onKeyUp("right");
-          }, 20);
-        }}
-      >
-        right
-      </Button>
-      <Button
-        onClick={() => {
-          emulator?.onKeyDown("b");
-          setTimeout(() => {
-            emulator?.onKeyUp("b");
-          }, 20);
-        }}
-      >
-        B
-      </Button>
-      <Button
-        onClick={() => {
-          emulator?.onKeyDown("a");
-          setTimeout(() => {
-            emulator?.onKeyUp("a");
-          }, 20);
-        }}
-      >
-        A
-      </Button>
+      />
     </div>
   );
 }
