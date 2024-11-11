@@ -4,6 +4,8 @@ This is a web based emulator written in JavaScript and TypeScript for the Ninten
 
 It allows running E-Reader applications without using any of Nintendo's proprietary IP. The application runs completely outside of a GBA and an E-Reader, so there are no copyright or IP implications.
 
+![emulator on phone](./emulatorOnPhone.jpg)
+
 ## Status: Pre Alpha
 
 This is very raw and was just started at time of writing this.
@@ -31,14 +33,37 @@ const canvas = document.getElementById("someCanvasOnAWebPage");
 canvas.width = 240;
 canvas.height = 160;
 
-for (let i = 0; i < 100; ++i) {
-  await emulator.frame(canvas);
-}
+emulator.run();
+emulator.pause();
+emulator.reset();
 ```
+
+`run()` uses `requestAnimationFrame`, so it is not asychronous in the traditional sense. `pause()` and `reset()` can be called whenever.
+
+### Preloading
+
+The first time tiles are created for a sprite or background can be very slow, especially if the sprite has a lot of frames and especially on mobile. This can be mitigated with `emulator.preload`.
+
+```typescript
+// the address in the rom where the sprite or bg is located
+const addressofSpriteStruct = 0x1234;
+const addressofBackgroundStruct = 0x4567;
+
+await emulator.preload({
+  sprites: [addressOfSpriteStruct],
+  customBackgrounds: [addressOfBackgroundStruct],
+});
+```
+
+`preload` returns a promise allowing throwing up a loading screen.
+
+Once the sprites/bgs are preloaded, they will then run in the emulator at full speed.
 
 ## Sandbox
 
-In `sandbox` is a simple implementation of the emulator. To use:
+In `sandbox` is an implementation of the emulator. To use:
+
+NOTE: the emulator is currently assuming you are running Solitaire.
 
 1. `yarn install` at the root of the repo
 2. Get a `.bin` file and place it at `sandbox/public/main.bin`
