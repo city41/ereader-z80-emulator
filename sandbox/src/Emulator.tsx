@@ -86,7 +86,9 @@ function Emulator() {
   return (
     <>
       <div
-        className={clsx("relative w-full xh-full sm:mx-auto xdrop-shadow-lg")}
+        className={clsx(
+          "relative w-full xh-full sm:mx-auto drop-shadow-lg mt-0 sm:mt-6"
+        )}
         style={{ maxWidth: 480 }}
       >
         {showDifferences && (
@@ -119,8 +121,8 @@ function Emulator() {
             }
           }}
         />
-        <div className="xbg-lime-600 xborder-2 xborder-b-lime-800 xborder-b-8 xrounded-b-xl overflow-hidden px-4">
-          <div className="rounded-b-xl sm:rounded-xl overflow-hidden bg-lime-600 -mx-4 p-4">
+        <div className="overflow-hidden px-4">
+          <div className="rounded-xl overflow-hidden bg-lime-600 -mx-4 p-4">
             <div>
               <OnscreenControlsLR
                 className="-mx-4 pb-2"
@@ -173,7 +175,7 @@ function Emulator() {
               </div>
             </div>
           </div>
-          <div className="rounded-b-xl sm:rounded-xl overflow-hidden bg-lime-600 -mx-4 px-4">
+          <div className="rounded-xl overflow-hidden bg-lime-600 -mx-4 px-4">
             <Hinge className="-mx-4" />
             <OnscreenControlsLRUDAB
               className="mt-24 mb-4 sm:mb-24"
@@ -184,9 +186,9 @@ function Emulator() {
                 emulator?.onKeyUp(key);
               }}
             />
-            <div className="flex flex-row justify-between sm:justify-around pb-4">
+            <div className="flex flex-row justify-between sm:justify-around pb-4 invisible">
               <a
-                className="text-white underline text-xl sm:text-base w-2/5 sm:w-auto invisible sm:visible cursor-pointer"
+                className="text-white underline text-xl sm:text-base w-2/5 sm:w-auto invisible xsm:visible cursor-pointer"
                 onClick={() => setShowKeyboardControls(true)}
               >
                 keyboard controls
