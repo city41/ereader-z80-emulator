@@ -18,7 +18,7 @@ function LRButton({ className, onKeyDown, onKeyUp, button }: LRButtonProps) {
     <div
       className={clsx(
         className,
-        "bg-slate-800 rounded-full w-20 h-12 sm:w-24 sm:h-14 text-white grid place-items-center text-2xl sm:text-4xl select-none active:bg-slate-500 border-8 border-orange-700",
+        "bg-slate-700 rounded-full w-20 h-12 sm:w-24 sm:h-14 text-white grid place-items-center text-2xl sm:text-4xl select-none active:bg-slate-500 border-8 border-slate-900",
         {
           "rounded-r-none border-r-0": button === "r",
           "rounded-l-none border-l-0": button === "l",

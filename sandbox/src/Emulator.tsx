@@ -119,8 +119,8 @@ function Emulator() {
             }
           }}
         />
-        <div className="xbg-orange-600 xborder-2 xborder-b-orange-800 xborder-b-8 xrounded-b-xl overflow-hidden px-4">
-          <div className="rounded-b-xl sm:rounded-xl overflow-hidden bg-orange-600 -mx-4 p-4">
+        <div className="xbg-lime-600 xborder-2 xborder-b-lime-800 xborder-b-8 xrounded-b-xl overflow-hidden px-4">
+          <div className="rounded-b-xl sm:rounded-xl overflow-hidden bg-lime-600 -mx-4 p-4">
             <div>
               <OnscreenControlsLR
                 className="-mx-4 pb-2"
@@ -158,7 +158,7 @@ function Emulator() {
                   }}
                 />
               </div>
-              <div className="text-center w-full py-1 font-bold italic text-2xl text-slate-400 bg-black rounded-b-xl overflow-hidden flex flex-row items-center justify-center gap-x-4">
+              <div className="text-center w-full py-1 font-bold italic text-2xl text-slate-400 bg-black rounded-b-xl overflow-hidden flex flex-row items-center justify-center gap-x-4 mb-4">
                 GAME DOG
                 <div className="grid place-items-center">
                   <img
@@ -173,7 +173,7 @@ function Emulator() {
               </div>
             </div>
           </div>
-          <div className="rounded-b-xl sm:rounded-xl overflow-hidden bg-orange-600 -mx-4 px-4">
+          <div className="rounded-b-xl sm:rounded-xl overflow-hidden bg-lime-600 -mx-4 px-4">
             <Hinge className="-mx-4" />
             <OnscreenControlsLRUDAB
               className="mt-24 mb-4 sm:mb-24"

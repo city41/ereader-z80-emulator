@@ -90,7 +90,7 @@ function OnscreenControlsLRUDAB({
     >
       <div className="grid grid-cols-3 grid-rows-3 w-40 h-40 mx-auto relative">
         <div
-          className="absolute -left-7 -top-7 -right-7 -bottom-7 rounded-full border-orange-700"
+          className="absolute -left-7 -top-7 -right-7 -bottom-7 rounded-full border-lime-700"
           style={{ borderWidth: 6 }}
         />
         <div />
@@ -105,7 +105,7 @@ function OnscreenControlsLRUDAB({
       </div>
       <div className="relative grid grid-cols-2 place-items-center transform -rotate-12">
         <div
-          className="absolute -left-2 top-4 -right-2 bottom-4 rounded-full border-orange-700"
+          className="absolute -left-2 top-4 -right-2 bottom-4 rounded-full border-lime-700"
           style={{ borderWidth: 6 }}
         />
         <ABButton onKeyDown={onKeyDown} onKeyUp={onKeyUp} button="b" />

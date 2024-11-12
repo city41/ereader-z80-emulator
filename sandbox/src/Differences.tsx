@@ -9,7 +9,7 @@ function Differences({ className, onDismissed }: DifferencesProps) {
   return (
     <div className={clsx(className, "w-full h-full")}>
       <div className="absolute left-0 top-0 right-0 bottom-0 bg-black opacity-50" />
-      <div className="absolute left-4 top-16 right-4 bg-orange-600 flex flex-col items-center gap-y-4 p-4 rounded-xl sm:w-1/2 sm:mx-auto">
+      <div className="absolute left-4 top-16 right-4 bg-lime-600 flex flex-col items-center gap-y-4 p-4 rounded-xl sm:w-1/2 sm:mx-auto">
         <p>
           This is an E-Reader emulator, and it is playing the actual E-Reader
           Solitaire game.
@@ -23,7 +23,7 @@ function Differences({ className, onDismissed }: DifferencesProps) {
         </p>
 
         <button
-          className="p-4 border border-orange-800 bg-orange-400 text-orange-950 font-bold"
+          className="p-4 border border-lime-800 bg-lime-400 text-lime-950 font-bold"
           onClick={onDismissed}
         >
           Okay

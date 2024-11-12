@@ -7,11 +7,11 @@ type HingeProps = {
 function Hinge({ className }: HingeProps) {
   return (
     <div className={clsx(className, "grid grid-cols-12 h-10")}>
-      <div className="border-4 border-orange-700 rounded-l-xl" />
-      <div className="border-4 border-orange-700 col-span-5" />
-      <div className="border-4 border-orange-700 col-span-4" />
-      <div className="border-4 border-orange-700" />
-      <div className="border-4 border-orange-700 rounded-r-xl" />
+      <div className="border-4 border-lime-700 rounded-l-xl" />
+      <div className="border-4 border-lime-700 col-span-5" />
+      <div className="border-4 border-lime-700 col-span-4" />
+      <div className="border-4 border-lime-700" />
+      <div className="border-4 border-lime-700 rounded-r-xl" />
     </div>
   );
 }
