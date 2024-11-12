@@ -40,12 +40,36 @@ function DpadButton({ onKeyDown, onKeyUp, direction }: DpadButtonProps) {
             "rounded-b-lg": direction === "down",
           }
         )}
-        onMouseDown={() => onKeyDown(direction)}
-        onMouseUp={() => onKeyUp(direction)}
-        onMouseLeave={() => onKeyUp(direction)}
-        onTouchStart={() => onKeyDown(direction)}
-        onTouchEnd={() => onKeyUp(direction)}
-        onTouchCancel={() => onKeyUp(direction)}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onKeyDown(direction);
+        }}
+        onMouseUp={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onKeyUp(direction);
+        }}
+        onMouseLeave={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onKeyUp(direction);
+        }}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onKeyDown(direction);
+        }}
+        onTouchEnd={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onKeyUp(direction);
+        }}
+        onTouchCancel={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onKeyUp(direction);
+        }}
       >
         <div
           className={clsx(styles[direction], {
@@ -64,12 +88,36 @@ function ABButton({ onKeyDown, onKeyUp, button }: ABButtonProps) {
   return (
     <div
       className="bg-slate-700 rounded-full w-20 h-20 text-white grid place-items-center text-4xl select-none active:bg-slate-500 border-8 border-slate-900 transform rotate-12"
-      onMouseDown={() => onKeyDown(button)}
-      onMouseUp={() => onKeyUp(button)}
-      onMouseLeave={() => onKeyUp(button)}
-      onTouchStart={() => onKeyDown(button)}
-      onTouchEnd={() => onKeyUp(button)}
-      onTouchCancel={() => onKeyUp(button)}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyDown(button);
+      }}
+      onMouseUp={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyUp(button);
+      }}
+      onMouseLeave={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyUp(button);
+      }}
+      onTouchStart={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyDown(button);
+      }}
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyUp(button);
+      }}
+      onTouchCancel={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyUp(button);
+      }}
     >
       {button.toUpperCase()}
     </div>

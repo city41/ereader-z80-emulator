@@ -24,12 +24,36 @@ function LRButton({ className, onKeyDown, onKeyUp, button }: LRButtonProps) {
           "rounded-l-none border-l-0": button === "l",
         }
       )}
-      onMouseDown={() => onKeyDown(button)}
-      onMouseUp={() => onKeyUp(button)}
-      onMouseLeave={() => onKeyUp(button)}
-      onTouchStart={() => onKeyDown(button)}
-      onTouchEnd={() => onKeyUp(button)}
-      onTouchCancel={() => onKeyUp(button)}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyDown(button);
+      }}
+      onMouseUp={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyUp(button);
+      }}
+      onMouseLeave={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyUp(button);
+      }}
+      onTouchStart={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyDown(button);
+      }}
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyUp(button);
+      }}
+      onTouchCancel={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onKeyUp(button);
+      }}
     >
       {button.toUpperCase()}
     </div>
