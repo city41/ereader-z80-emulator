@@ -1,0 +1,12 @@
+@keyframes swipe {
+  0% {
+    margin-left: 150%;
+  }
+  100% {
+    margin-left: -150%;
+  }
+}
+
+.swipeAnimation {
+  animation: swipe 1.8s;
+}

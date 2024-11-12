@@ -8,18 +8,13 @@ type SoundCacheEntry = {
 
 const audioCache: Record<number, SoundCacheEntry> = {};
 
-async function createAudio(
-  sound: ERAPISystemSound
-): Promise<HTMLAudioElement | null> {
+function createAudio(sound: ERAPISystemSound): HTMLAudioElement | null {
   const data = systemSounds[sound.id];
 
   if (!data) {
     return null;
   }
 
-  //   const context = new AudioContext();
-
-  //   await context.decodeAudioData(data);
   const audio = document.createElement("audio");
   const blob = new Blob([data], { type: "audio/ogg" });
   audio.src = window.URL.createObjectURL(blob);
@@ -27,16 +22,23 @@ async function createAudio(
   return audio;
 }
 
-function stopAllSounds(type: "sfx" | "music") {
-  Object.values(audioCache).forEach((a) => {
-    if (a.type === type) {
-      a.audio.pause();
-    }
-  });
-}
+// function stopAllSounds(type: "sfx" | "music") {
+//   Object.values(audioCache).forEach((a) => {
+//     if (a.type === type) {
+//       a.audio.pause();
+//     }
+//   });
+// }
 
-async function playSound(sound: ERAPISystemSound) {
-  stopAllSounds(sound.type);
+function playSound(sound: ERAPISystemSound) {
+  // stopAllSounds(sound.type);
+
+  // HACK: this is top stop the drum roll and play the cymbol
+  // we don't want to stop other sounds as they often naturally overlap
+  if (sound.id === 756) {
+    audioCache[755].audio.pause();
+  }
+
   const cachedAudio = audioCache[sound.id];
 
   if (cachedAudio) {
@@ -44,7 +46,7 @@ async function playSound(sound: ERAPISystemSound) {
     return;
   }
 
-  const audio = await createAudio(sound);
+  const audio = createAudio(sound);
 
   if (audio) {
     audioCache[sound.id] = {
