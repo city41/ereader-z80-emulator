@@ -65,6 +65,7 @@ export type ERAPIState = {
   backgrounds: ERAPIBackground[];
   sprites: ERAPICustomSprite[];
   sounds: ERAPISystemSound[];
+  exit?: "reset" | "exit";
 };
 
 export type ErapiApiCallHandler = {

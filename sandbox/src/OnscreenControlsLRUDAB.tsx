@@ -1,21 +1,21 @@
 import clsx from "clsx";
-import styles from "./OnscreenControls.module.css";
+import styles from "./OnscreenControlsLRUDAB.module.css";
 
-type OnscreenControlsProps = {
+type OnscreenControlsLRUDABProps = {
   className?: string;
   onKeyDown: (key: string) => void;
   onKeyUp: (key: string) => void;
 };
 
 type DpadButtonProps = {
-  onKeyUp: OnscreenControlsProps["onKeyUp"];
-  onKeyDown: OnscreenControlsProps["onKeyDown"];
+  onKeyUp: OnscreenControlsLRUDABProps["onKeyUp"];
+  onKeyDown: OnscreenControlsLRUDABProps["onKeyDown"];
   direction: "left" | "right" | "up" | "down";
 };
 
 type ABButtonProps = {
-  onKeyUp: OnscreenControlsProps["onKeyUp"];
-  onKeyDown: OnscreenControlsProps["onKeyDown"];
+  onKeyUp: OnscreenControlsLRUDABProps["onKeyUp"];
+  onKeyDown: OnscreenControlsLRUDABProps["onKeyDown"];
   button: "a" | "b";
 };
 
@@ -76,11 +76,11 @@ function ABButton({ onKeyDown, onKeyUp, button }: ABButtonProps) {
   );
 }
 
-function OnscreenControls({
+function OnscreenControlsLRUDAB({
   className,
   onKeyDown,
   onKeyUp,
-}: OnscreenControlsProps) {
+}: OnscreenControlsLRUDABProps) {
   return (
     <div
       className={clsx(
@@ -107,4 +107,4 @@ function OnscreenControls({
   );
 }
 
-export { OnscreenControls };
+export { OnscreenControlsLRUDAB };

@@ -14,9 +14,8 @@ const rst8ApiCallHandler: Record<number, ErapiApiCallHandler> = {
      * a = 1, restart app, 2=return to ereader rom
      */
     functionName: "Exit",
-    handle(state) {
-      // the simulator treats pc=0xffff as the program ending
-      state.pc = 0xffff;
+    handle(state, _memory, _handleGenerator, erapiState) {
+      erapiState.exit = state.a === 1 ? "reset" : "exit";
     },
   },
   [0x1]: {

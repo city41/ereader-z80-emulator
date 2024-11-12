@@ -1,9 +1,10 @@
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { EreaderEmulator } from "../../src/EreaderEmulator";
-import { OnscreenControls } from "./OnscreenControls";
+import { OnscreenControlsLRUDAB } from "./OnscreenControlsLRUDAB";
 import frannybwPng from "./frannybw.png";
 import { CardSwipe } from "./CardSwipe";
+import { OnscreenControlsLR } from "./OnscreenControlsLR";
 
 async function loadBinary(url: string): Promise<Uint8Array> {
   const result = await fetch(url);
@@ -31,7 +32,7 @@ const keyMapping: Record<string, string> = {
   w: "start",
 };
 
-function App() {
+function Emulator() {
   const [swipeDone, setSwipeDone] = useState(false);
   const [emulator, setEmulator] = useState<EreaderEmulator | null>(null);
   const [emulationState, setEmulationState] =
@@ -77,8 +78,6 @@ function App() {
     }
   }, []);
 
-  console.log("emulationState", emulationState);
-
   return (
     <>
       <div
@@ -102,6 +101,15 @@ function App() {
         />
         <div className="bg-orange-600 border-2 border-black border-b-orange-800 border-b-8 rounded-b-xl sm:rounded-xl overflow-hidden p-4">
           <div>
+            <OnscreenControlsLR
+              className="-mx-4 pb-2"
+              onKeyDown={(key) => {
+                emulator?.onKeyDown(key);
+              }}
+              onKeyUp={(key) => {
+                emulator?.onKeyUp(key);
+              }}
+            />
             <div
               className={clsx(
                 "overflow-hidden border-8 border-b-0 border-black rounded-xl rounded-b-none overflow-none"
@@ -143,7 +151,7 @@ function App() {
               </div>
             </div>
           </div>
-          <OnscreenControls
+          <OnscreenControlsLRUDAB
             className="mt-24 mb-4 sm:mb-24"
             onKeyDown={(key) => {
               emulator?.onKeyDown(key);
@@ -158,4 +166,4 @@ function App() {
   );
 }
 
-export default App;
+export { Emulator };

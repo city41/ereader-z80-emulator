@@ -3031,6 +3031,7 @@ export function Z80(coreParameter) {
   this.interrupt = interrupt;
   this.getState = getState;
   this.setState = setState;
+  this.reset = reset;
 
   // T.Busse, Apr-2020: Modifications to allow Z80N instructions
   if (core.z80n_enabled) {

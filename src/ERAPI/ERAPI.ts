@@ -6,6 +6,7 @@ import { rst8ApiCallHandler } from "./rst8ApiCallHandlers";
 import { ERAPIBackground, ERAPICustomSprite, ERAPISystemSound } from "./types";
 
 class ERAPI {
+  public exit?: "reset" | "exit";
   public backgrounds: ERAPIBackground[] = [];
   public sprites: ERAPICustomSprite[] = [];
   public sounds: ERAPISystemSound[] = [];
@@ -80,11 +81,25 @@ class ERAPI {
     return state;
   }
 
-  update() {
+  /**
+   * @returns true if should reset, false otherwise
+   */
+  update(): boolean {
     this.sprites.forEach((s) => this.updateSprite(s));
 
     this.sounds.forEach((s) => playSound(s));
     this.sounds = [];
+
+    const shouldReset = this.exit === "reset";
+    this.exit = undefined;
+
+    return shouldReset;
+  }
+
+  reset() {
+    this.sprites = [];
+    this.sounds = [];
+    this.backgrounds = [];
   }
 }
 

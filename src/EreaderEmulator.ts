@@ -20,6 +20,7 @@ async function wait(millis: number): Promise<void> {
 }
 
 class EreaderEmulator implements Z80Core {
+  private game: Uint8Array;
   private z80: any;
   private erapi: ERAPI;
   private memory: SimulatedMemory;
@@ -31,8 +32,14 @@ class EreaderEmulator implements Z80Core {
   private handleGenerator: () => number;
 
   constructor(game: Uint8Array, canvas: HTMLCanvasElement) {
+    this.game = game;
     this.canvas = canvas;
+
     this.z80 = new (Z80 as any).Z80(this);
+    const state = this.z80.getState();
+    state.pc = 0x100;
+    this.z80.setState(state);
+
     this.memory = new SimulatedMemory();
     this.memory.writeBlock(0x100, game);
     this.erapi = new ERAPI();
@@ -86,7 +93,11 @@ class EreaderEmulator implements Z80Core {
   }
 
   private frame() {
-    this.erapi.update();
+    if (this.erapi.update()) {
+      this.reset();
+      return;
+    }
+
     renderFrame(this.canvas, this.erapi);
     this.framesToRender -= 1;
 
@@ -130,10 +141,15 @@ class EreaderEmulator implements Z80Core {
   }
 
   reset() {
+    this.memory = new SimulatedMemory();
+    this.memory.writeBlock(0x100, this.game);
+
+    this.z80.reset();
     const state = this.z80.getState();
     state.pc = 0x100;
-    state.halted = false;
     this.z80.setState(state);
+
+    this.erapi.reset();
 
     this.run();
   }
