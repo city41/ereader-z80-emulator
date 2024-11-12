@@ -5,6 +5,8 @@ import { OnscreenControlsLRUDAB } from "./OnscreenControlsLRUDAB";
 import frannybwPng from "./frannybw.png";
 import { CardSwipe } from "./CardSwipe";
 import { OnscreenControlsLR } from "./OnscreenControlsLR";
+import { Differences } from "./Differences";
+import { KeyboardControls } from "./KeyboardControls";
 
 async function loadBinary(url: string): Promise<Uint8Array> {
   const result = await fetch(url);
@@ -33,11 +35,13 @@ const keyMapping: Record<string, string> = {
 };
 
 function Emulator() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [swipeDone, setSwipeDone] = useState(false);
   const [emulator, setEmulator] = useState<EreaderEmulator | null>(null);
   const [emulationState, setEmulationState] =
     useState<EmulationState>("preloading");
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [showDifferences, setShowDifferences] = useState(false);
+  const [showKeyboardControls, setShowKeyboardControls] = useState(false);
 
   useEffect(() => {
     async function onCanvas(canvas: HTMLCanvasElement) {
@@ -85,6 +89,22 @@ function Emulator() {
           "relative w-full h-full sm:w-1/2 sm:mx-auto shadow-2xl"
         )}
       >
+        {showDifferences && (
+          <Differences
+            className="absolute left-0 top-0 right-0 bottom-0 z-20"
+            onDismissed={() => {
+              setShowDifferences(false);
+            }}
+          />
+        )}
+        {showKeyboardControls && (
+          <KeyboardControls
+            className="absolute left-0 top-0 right-0 bottom-0 z-20"
+            onDismissed={() => {
+              setShowKeyboardControls(false);
+            }}
+          />
+        )}
         <CardSwipe
           className={clsx(
             "absolute w-full h-full top-0 left-0 bottom-0 right-0 z-10",
@@ -160,6 +180,20 @@ function Emulator() {
               emulator?.onKeyUp(key);
             }}
           />
+          <div className="flex flex-row justify-between sm:justify-around">
+            <a
+              className="text-white underline text-xl sm:text-base w-2/5 sm:w-auto invisible sm:visible cursor-pointer"
+              onClick={() => setShowKeyboardControls(true)}
+            >
+              keyboard controls
+            </a>
+            <a
+              className="text-white underline text-xl sm:text-base w-2/5 sm:w-auto cursor-pointer"
+              onClick={() => setShowDifferences(true)}
+            >
+              This version is a little different...
+            </a>
+          </div>
         </div>
       </div>
     </>
