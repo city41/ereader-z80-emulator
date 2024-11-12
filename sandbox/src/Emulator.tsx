@@ -186,9 +186,9 @@ function Emulator() {
                 emulator?.onKeyUp(key);
               }}
             />
-            <div className="flex flex-row justify-between sm:justify-around pb-4 invisible">
+            <div className="flex flex-row justify-between sm:justify-around pb-4">
               <a
-                className="text-white underline text-xl sm:text-base w-2/5 sm:w-auto invisible xsm:visible cursor-pointer"
+                className="text-white underline text-xl sm:text-base w-2/5 sm:w-auto invisible sm:visible cursor-pointer"
                 onClick={() => setShowKeyboardControls(true)}
               >
                 keyboard controls

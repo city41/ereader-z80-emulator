@@ -29,18 +29,21 @@ function CardSwipe({ className, onSwipeDone }: CardSwipeProps) {
       <div className="row-start-5 bg-slate-600" />
 
       <img
-        className={clsx("absolute bottom-48 w-screen sm:w-full", {
+        className={clsx("absolute w-screen sm:w-full", {
           [styles.swipeAnimation]: swipeStarted,
           hidden: !swipeStarted,
         })}
-        style={{ marginLeft: "-130%" }}
+        style={{ marginLeft: "-130%", bottom: "19%" }}
         src={solitaireSvg}
         onAnimationEnd={() => {
           playSound("swipeSuccess");
           setTimeout(onSwipeDone, 1200);
         }}
       />
-      <div className="absolute bottom-0 h-36 sm:h-64 w-full border-t-black border-t-8 grid grid-rows-2">
+      <div
+        className="absolute bottom-0 sm:h-64 w-full border-t-black border-t-8 grid grid-rows-2"
+        style={{ height: "25%" }}
+      >
         <div className="w-full h-full bg-slate-600" />
         <div className="w-full h-full bg-slate-800" />
       </div>

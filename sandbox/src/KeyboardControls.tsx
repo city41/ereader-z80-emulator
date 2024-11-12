@@ -16,7 +16,7 @@ function KeyboardControls({ className, onDismissed }: DifferencesProps) {
   return (
     <div className={clsx(className, "w-full h-full")}>
       <div className="absolute left-0 top-0 right-0 bottom-0 bg-black opacity-50" />
-      <div className="absolute left-4 top-16 right-4 bg-lime-600 flex flex-col items-center gap-y-4 p-4 rounded-xl sm:w-1/2 sm:mx-auto">
+      <div className="absolute left-4 top-16 right-4 bg-lime-600 flex flex-col items-center gap-y-4 p-4 rounded-xl sm:w-4/5 sm:mx-auto">
         <dl className="grid grid-cols-2 space-y-3 gap-x-8">
           <dt className="place-self-end">
             <KeyboardKey className="text-3xl">
