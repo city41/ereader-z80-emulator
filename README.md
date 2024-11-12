@@ -4,7 +4,7 @@ This is a web based emulator written in JavaScript and TypeScript for the Ninten
 
 It allows running E-Reader applications without using any of Nintendo's proprietary IP. The application runs completely outside of a GBA and an E-Reader, so there are no copyright or IP implications.
 
-![emulator on phone](./emulatorOnPhone.jpg)
+https://github.com/user-attachments/assets/6bdc089c-26b9-48d8-abc2-5a2e183d29ba
 
 ## Status: Pre Alpha
 
