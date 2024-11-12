@@ -28,6 +28,7 @@
   },
   "scripts": {
     "sandbox-dev": "yarn vite sandbox --host 0.0.0.0",
+    "sandbox-build": "yarn vite build sandbox",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

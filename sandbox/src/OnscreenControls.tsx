@@ -88,7 +88,7 @@ function OnscreenControls({
         "grid grid-cols-2 mt-8 xbg-orange-700 sm:rounded-xl pt-8 pb-4 -mx-4 sm:mx-0"
       )}
     >
-      <div className="grid grid-cols-3 grid-rows-3 w-48 h-48 mx-auto">
+      <div className="grid grid-cols-3 grid-rows-3 w-40 h-40 mx-auto">
         <div />
         <DpadButton onKeyDown={onKeyDown} onKeyUp={onKeyUp} direction="up" />
         <div />
