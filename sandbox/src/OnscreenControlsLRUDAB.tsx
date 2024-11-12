@@ -23,7 +23,7 @@ function DpadButton({ onKeyDown, onKeyUp, direction }: DpadButtonProps) {
   return (
     <div className="relative w-full h-full">
       <div
-        className={clsx("absolute bg-orange-700 rounded-xl", {
+        className={clsx("absolute bg-slate-900 rounded-xl", {
           "-left-2 -top-2 -right-2 bottom-0": direction === "up",
           "-left-2 top-0 -right-2 -bottom-2": direction === "down",
           "-left-2 -top-2 right-0 -bottom-2": direction === "left",
@@ -32,7 +32,7 @@ function DpadButton({ onKeyDown, onKeyUp, direction }: DpadButtonProps) {
       />
       <div
         className={clsx(
-          "absolute top-0 left-0 right-0 bottom-0 bg-slate-800 grid place-items-center active:bg-slate-500 w-full h-full",
+          "absolute top-0 left-0 right-0 bottom-0 bg-slate-700 grid place-items-center active:bg-slate-500 w-full h-full",
           {
             "rounded-t-lg": direction === "up",
             "rounded-l-lg": direction === "left",
@@ -63,7 +63,7 @@ function DpadButton({ onKeyDown, onKeyUp, direction }: DpadButtonProps) {
 function ABButton({ onKeyDown, onKeyUp, button }: ABButtonProps) {
   return (
     <div
-      className="bg-slate-800 rounded-full w-20 h-20 sm:w-32 sm:h-32 text-white grid place-items-center text-4xl sm:text-6xl select-none active:bg-slate-500 border-8 border-orange-700"
+      className="bg-slate-700 rounded-full w-20 h-20 text-white grid place-items-center text-4xl select-none active:bg-slate-500 border-8 border-slate-900 transform rotate-12"
       onMouseDown={() => onKeyDown(button)}
       onMouseUp={() => onKeyUp(button)}
       onMouseLeave={() => onKeyUp(button)}
@@ -85,21 +85,29 @@ function OnscreenControlsLRUDAB({
     <div
       className={clsx(
         className,
-        "grid grid-cols-2 mt-8 xbg-orange-700 sm:rounded-xl pt-8 pb-4 -mx-4 sm:mx-0"
+        "grid grid-cols-2 gap-x-4 mt-8 sm:rounded-xl pt-8 pb-4 -mx-4 sm:mx-0"
       )}
     >
-      <div className="grid grid-cols-3 grid-rows-3 w-40 h-40 mx-auto">
+      <div className="grid grid-cols-3 grid-rows-3 w-40 h-40 mx-auto relative">
+        <div
+          className="absolute -left-7 -top-7 -right-7 -bottom-7 rounded-full border-orange-700"
+          style={{ borderWidth: 6 }}
+        />
         <div />
         <DpadButton onKeyDown={onKeyDown} onKeyUp={onKeyUp} direction="up" />
         <div />
         <DpadButton onKeyDown={onKeyDown} onKeyUp={onKeyUp} direction="left" />
-        <div className="bg-slate-800" />
+        <div className="bg-slate-700" />
         <DpadButton onKeyDown={onKeyDown} onKeyUp={onKeyUp} direction="right" />
         <div />
         <DpadButton onKeyDown={onKeyDown} onKeyUp={onKeyUp} direction="down" />
         <div />
       </div>
-      <div className="grid grid-cols-2 place-items-center">
+      <div className="relative grid grid-cols-2 place-items-center transform -rotate-12">
+        <div
+          className="absolute -left-2 top-4 -right-2 bottom-4 rounded-full border-orange-700"
+          style={{ borderWidth: 6 }}
+        />
         <ABButton onKeyDown={onKeyDown} onKeyUp={onKeyUp} button="b" />
         <ABButton onKeyDown={onKeyDown} onKeyUp={onKeyUp} button="a" />
       </div>

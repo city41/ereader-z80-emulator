@@ -7,6 +7,7 @@ import { CardSwipe } from "./CardSwipe";
 import { OnscreenControlsLR } from "./OnscreenControlsLR";
 import { Differences } from "./Differences";
 import { KeyboardControls } from "./KeyboardControls";
+import { Hinge } from "./Hinge";
 
 async function loadBinary(url: string): Promise<Uint8Array> {
   const result = await fetch(url);
@@ -85,9 +86,8 @@ function Emulator() {
   return (
     <>
       <div
-        className={clsx(
-          "relative w-full h-full sm:w-1/2 sm:mx-auto shadow-2xl"
-        )}
+        className={clsx("relative w-full xh-full sm:mx-auto xdrop-shadow-lg")}
+        style={{ maxWidth: 480 }}
       >
         {showDifferences && (
           <Differences
@@ -119,10 +119,64 @@ function Emulator() {
             }
           }}
         />
-        <div className="bg-orange-600 border-2 border-black border-b-orange-800 border-b-8 rounded-b-xl sm:rounded-xl overflow-hidden p-4">
-          <div>
-            <OnscreenControlsLR
-              className="-mx-4 pb-2"
+        <div className="xbg-orange-600 xborder-2 xborder-b-orange-800 xborder-b-8 xrounded-b-xl overflow-hidden px-4">
+          <div className="rounded-b-xl sm:rounded-xl overflow-hidden bg-orange-600 -mx-4 p-4">
+            <div>
+              <OnscreenControlsLR
+                className="-mx-4 pb-2"
+                onKeyDown={(key) => {
+                  emulator?.onKeyDown(key);
+                }}
+                onKeyUp={(key) => {
+                  emulator?.onKeyUp(key);
+                }}
+              />
+              <div
+                className={clsx(
+                  "overflow-hidden border-8 border-b-0 border-black rounded-xl rounded-b-none overflow-none"
+                )}
+              >
+                <canvas
+                  ref={canvasRef}
+                  width={240}
+                  height={160}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    imageRendering: "pixelated",
+                  }}
+                  onClick={() => {
+                    setEmulationState((r) => {
+                      if (r === "running") {
+                        emulator?.pause();
+                        return "paused";
+                      } else {
+                        emulator?.run();
+                        return "running";
+                      }
+                    });
+                  }}
+                />
+              </div>
+              <div className="text-center w-full py-1 font-bold italic text-2xl text-slate-400 bg-black rounded-b-xl overflow-hidden flex flex-row items-center justify-center gap-x-4">
+                GAME DOG
+                <div className="grid place-items-center">
+                  <img
+                    src={frannybwPng}
+                    className="w-10 h-auto opacity-50"
+                    style={{
+                      imageRendering: "pixelated",
+                      mixBlendMode: "screen",
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="rounded-b-xl sm:rounded-xl overflow-hidden bg-orange-600 -mx-4 px-4">
+            <Hinge className="-mx-4" />
+            <OnscreenControlsLRUDAB
+              className="mt-24 mb-4 sm:mb-24"
               onKeyDown={(key) => {
                 emulator?.onKeyDown(key);
               }}
@@ -130,69 +184,20 @@ function Emulator() {
                 emulator?.onKeyUp(key);
               }}
             />
-            <div
-              className={clsx(
-                "overflow-hidden border-8 border-b-0 border-black rounded-xl rounded-b-none overflow-none"
-              )}
-            >
-              <canvas
-                ref={canvasRef}
-                width={240}
-                height={160}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  imageRendering: "pixelated",
-                }}
-                onClick={() => {
-                  setEmulationState((r) => {
-                    if (r === "running") {
-                      emulator?.pause();
-                      return "paused";
-                    } else {
-                      emulator?.run();
-                      return "running";
-                    }
-                  });
-                }}
-              />
+            <div className="flex flex-row justify-between sm:justify-around pb-4">
+              <a
+                className="text-white underline text-xl sm:text-base w-2/5 sm:w-auto invisible sm:visible cursor-pointer"
+                onClick={() => setShowKeyboardControls(true)}
+              >
+                keyboard controls
+              </a>
+              <a
+                className="text-white underline text-xl sm:text-base w-2/5 sm:w-auto cursor-pointer"
+                onClick={() => setShowDifferences(true)}
+              >
+                This version is a little different...
+              </a>
             </div>
-            <div className="text-center w-full py-4 font-bold italic text-3xl text-slate-400 bg-black rounded-b-xl overflow-hidden flex flex-row items-center justify-center gap-x-4">
-              GAME DOG
-              <div className="grid place-items-center">
-                <img
-                  src={frannybwPng}
-                  className="w-10 h-auto opacity-50"
-                  style={{
-                    imageRendering: "pixelated",
-                    mixBlendMode: "screen",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          <OnscreenControlsLRUDAB
-            className="mt-24 mb-4 sm:mb-24"
-            onKeyDown={(key) => {
-              emulator?.onKeyDown(key);
-            }}
-            onKeyUp={(key) => {
-              emulator?.onKeyUp(key);
-            }}
-          />
-          <div className="flex flex-row justify-between sm:justify-around">
-            <a
-              className="text-white underline text-xl sm:text-base w-2/5 sm:w-auto invisible sm:visible cursor-pointer"
-              onClick={() => setShowKeyboardControls(true)}
-            >
-              keyboard controls
-            </a>
-            <a
-              className="text-white underline text-xl sm:text-base w-2/5 sm:w-auto cursor-pointer"
-              onClick={() => setShowDifferences(true)}
-            >
-              This version is a little different...
-            </a>
           </div>
         </div>
       </div>

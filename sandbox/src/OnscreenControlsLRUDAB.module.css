@@ -1,35 +1,35 @@
 .left {
   width: 0;
   height: 0;
-  border-top: 18px solid transparent;
-  border-bottom: 18px solid transparent;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
 
-  border-right: 18px solid white;
+  border-right: 14px solid white;
 }
 
 .right {
   width: 0;
   height: 0;
-  border-top: 18px solid transparent;
-  border-bottom: 18px solid transparent;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
 
-  border-left: 18px solid white;
+  border-left: 14px solid white;
 }
 
 .up {
   width: 0;
   height: 0;
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
 
-  border-bottom: 18px solid white;
+  border-bottom: 14px solid white;
 }
 
 .down {
   width: 0;
   height: 0;
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
 
-  border-top: 18px solid white;
+  border-top: 14px solid white;
 }
