@@ -175,17 +175,6 @@ function Emulator() {
                     height: "auto",
                     imageRendering: "pixelated",
                   }}
-                  onClick={() => {
-                    setEmulationState((r) => {
-                      if (r === "running") {
-                        emulator?.pause();
-                        return "paused";
-                      } else {
-                        emulator?.run();
-                        return "running";
-                      }
-                    });
-                  }}
                 />
               </div>
               <div className="text-center w-full py-1 font-bold italic text-2xl text-slate-400 bg-black rounded-b-xl overflow-hidden flex flex-row items-center justify-center gap-x-4 mb-4">
