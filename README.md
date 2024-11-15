@@ -8,9 +8,7 @@ https://github.com/user-attachments/assets/6bdc089c-26b9-48d8-abc2-5a2e183d29ba
 
 ## Status: Pre Alpha
 
-This is very raw and was just started at time of writing this.
-
-Almost none of ERAPI is implemented, so almost no games will work. So far just `LoadCustomBackground`, `CreateSprite` and `SetSpritePos` are implemented, and not very well at that :)
+This is very raw, but coming along. It now plays Solitaire (see video above) almost perfectly.
 
 ## How to use
 
