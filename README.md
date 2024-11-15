@@ -38,6 +38,25 @@ emulator.reset();
 
 `run()` uses `requestAnimationFrame`, so it is not asychronous in the traditional sense. `pause()` and `reset()` can be called whenever.
 
+### System Resources
+
+By default the emulator has no system resources loaded, ie sound effects, music or backgrounds. It will still run, just silently and with nothing happening when `LoadSystemBackground` is called.
+
+To change this, call `SoundManager.setSounds()` and `SystemBackgroundManager.setBackgrounds()`.
+
+```
+const mySoundEffect = await loadAudioFile('mysoundeffect.ogg');
+SoundManager.setSounds({
+  23: mySoundEffect
+});
+```
+
+Where 23 is the sound's id. Ie the parameter passed to `PlaySystemSound`.
+
+The resources directory contains creative common resources that can be used for this purpose.
+
+The sandbox implementation uses these sounds and can be used as a guide [here](/blob/main/sandbox/src/Emulator.tsx#L65)
+
 ### Preloading
 
 The first time tiles are created for a sprite or background can be very slow, especially if the sprite has a lot of frames and especially on mobile. This can be mitigated with `emulator.preload`.
