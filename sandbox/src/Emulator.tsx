@@ -40,7 +40,7 @@ const keyMapping: Record<string, string> = {
   z: "b",
   x: "a",
   a: "l",
-  s: "s",
+  s: "r",
   q: "select",
   w: "start",
 };
