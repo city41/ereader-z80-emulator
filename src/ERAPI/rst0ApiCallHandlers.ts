@@ -2,9 +2,6 @@ import { extractCustomBackground } from "./backgrounds";
 import { extractSprite } from "./sprites";
 import { ERAPIBackground, ErapiApiCallHandler } from "./types";
 
-const BYTES_PER_TILE = 32;
-const BYTES_PER_PALETTE = 32;
-
 const rst0ApiCallHandler: Record<number, ErapiApiCallHandler> = {
   [0x0]: {
     functionName: "FadeIn",

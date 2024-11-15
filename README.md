@@ -67,3 +67,25 @@ NOTE: the emulator is currently assuming you are running Solitaire.
 2. Get a `.bin` file and place it at `sandbox/public/main.bin`
 3. `yarn sandbox-dev`
 4. visit `http://localhost:5173`
+
+# Development
+
+## Publishing
+
+ereader-z80-emulator uses [semantic versioning](https://semver.org/)
+
+Publishing a new version is done by bumping the version in package.json
+
+```bash
+yarn version
+yarn version v1.22.19
+info Current version: 0.4.0
+question New version: 0.4.1
+info New version: 0.4.1
+Done in 16.19s.
+
+git push
+git push --tags
+```
+
+Once [the Publish action](https://github.com/city41/ereader-z80-emulator/actions/workflows/publish.yml) notices the version has changed, it will run a build and publish to npm.
