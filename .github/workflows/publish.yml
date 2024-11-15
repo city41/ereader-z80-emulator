@@ -10,8 +10,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
-      - run: yarn install
+          node-version: "16"
+      - run: yarn install --prod
       - run: yarn prepublish
       - uses: JS-DevTools/npm-publish@v2
         with:
