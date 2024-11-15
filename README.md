@@ -87,6 +87,11 @@ NOTE: the emulator is currently assuming you are running Solitaire.
 3. `yarn sandbox-dev`
 4. visit `http://localhost:5173`
 
+## Known Issues
+
+- Much of ERAPI remains to be implemented
+- `halt` frames happen much faster in the emulator compared to a real GBA.
+
 # Development
 
 ## Publishing

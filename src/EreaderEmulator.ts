@@ -124,7 +124,7 @@ class EreaderEmulator implements Z80Core {
       this.z80.run_instruction();
     }
 
-    this.framesToRender = Math.max(this.z80.getState().a, 1);
+    this.framesToRender = Math.max(this.z80.getState().a, 1) * 2;
 
     requestAnimationFrame(() => {
       this.frame();
