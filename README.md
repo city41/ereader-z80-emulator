@@ -6,6 +6,10 @@ It allows running E-Reader applications without using any of Nintendo's propriet
 
 https://github.com/user-attachments/assets/6bdc089c-26b9-48d8-abc2-5a2e183d29ba
 
+## Try it out
+
+You can try the emulator playing Solitaire here: https://www.retrodotcards.com/solitaire/play
+
 ## Status: Pre Alpha
 
 This is very raw, but coming along. It now plays Solitaire (see video above) almost perfectly.
