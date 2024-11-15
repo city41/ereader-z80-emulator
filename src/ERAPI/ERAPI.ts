@@ -1,4 +1,4 @@
-import { playSound } from "../sound";
+import { SoundManager } from "../SoundManager";
 import { SimulatedMemory } from "../SimulatedMemory";
 import { Z80State } from "../types";
 import { rst0ApiCallHandler } from "./rst0ApiCallHandlers";
@@ -87,7 +87,7 @@ class ERAPI {
   update(): boolean {
     this.sprites.forEach((s) => this.updateSprite(s));
 
-    this.sounds.forEach((s) => playSound(s));
+    this.sounds.forEach((s) => SoundManager.playSound(s));
     this.sounds = [];
 
     const shouldReset = this.exit === "reset";

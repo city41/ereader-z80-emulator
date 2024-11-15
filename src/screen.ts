@@ -2,12 +2,10 @@ import {
   ERAPICustomBackground,
   ERAPICustomSprite,
   ERAPIState,
-  ERAPISystemBackground,
 } from "./ERAPI/types";
-import { systemBgs } from "./systemBackgrounds";
+import { SystemBackgroundManager } from "./SystemBackgroundManager";
 
 const customBackgroundCache: Record<string, HTMLCanvasElement> = {};
-const systemBackgroundCache: Record<string, HTMLImageElement> = {};
 const backgroundTileCache: Record<string, HTMLCanvasElement[]> = {};
 const spriteCache: Record<string, HTMLCanvasElement> = {};
 
@@ -195,29 +193,6 @@ function createCustomBackground(bg: ERAPICustomBackground): HTMLCanvasElement {
   return bgCanvas;
 }
 
-function createSystemBackground(
-  bg: ERAPISystemBackground
-): HTMLImageElement | null {
-  const cachedBg = systemBackgroundCache[bg.backgroundId];
-
-  if (cachedBg) {
-    return cachedBg;
-  }
-
-  const src = systemBgs[bg.backgroundId];
-
-  if (!src) {
-    return null;
-  }
-
-  const image = new Image();
-  image.src = systemBgs[bg.backgroundId];
-
-  systemBackgroundCache[bg.backgroundId] = image;
-
-  return image;
-}
-
 function drawSprite(sprite: ERAPICustomSprite): HTMLCanvasElement {
   const canvas = createCanvas(sprite.width * 8, sprite.height * 8);
   const context = canvas.getContext("2d")!;
@@ -269,7 +244,7 @@ function renderFrame(canvas: HTMLCanvasElement, state: ERAPIState) {
       const bgCanvas = createCustomBackground(bg);
       context.drawImage(bgCanvas, 0, 0);
     } else if (bg.type === "system") {
-      const systemBg = createSystemBackground(bg);
+      const systemBg = SystemBackgroundManager.getBackground(bg.backgroundId);
       if (systemBg) {
         context.drawImage(systemBg, 0, 0);
       }

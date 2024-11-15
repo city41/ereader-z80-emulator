@@ -1,15 +1,16 @@
 import clsx from "clsx";
 import styles from "./CardSwipe.module.css";
 import { useState } from "react";
-import { playSound } from "./sound";
 import { solitaireSvg } from "./solitaireCardSvg";
+import { SoundManager } from "./SoundManager";
 
 type CardSwipeProps = {
   className?: string;
+  preloading?: boolean;
   onSwipeDone: () => void;
 };
 
-function CardSwipe({ className, onSwipeDone }: CardSwipeProps) {
+function CardSwipe({ className, preloading, onSwipeDone }: CardSwipeProps) {
   const [swipeStarted, setSwipeStarted] = useState(false);
 
   return (
@@ -18,11 +19,11 @@ function CardSwipe({ className, onSwipeDone }: CardSwipeProps) {
     >
       <div
         className="row-span-4 text-white grid place-items-center"
-        onClick={() => setSwipeStarted(true)}
+        onClick={preloading ? undefined : () => setSwipeStarted(true)}
       >
         {!swipeStarted && (
           <div className="text-center text-3xl font-bold cursor-pointer">
-            Tap here to start
+            {preloading ? "Just a moment..." : "Tap here to start"}
           </div>
         )}
       </div>
@@ -36,7 +37,7 @@ function CardSwipe({ className, onSwipeDone }: CardSwipeProps) {
         style={{ marginLeft: "-130%", bottom: "19%" }}
         src={solitaireSvg}
         onAnimationEnd={() => {
-          playSound("swipeSuccess");
+          SoundManager.playSound("swipeSuccess");
           setTimeout(onSwipeDone, 1200);
         }}
       />

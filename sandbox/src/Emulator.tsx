@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-import { EreaderEmulator } from "../../src/EreaderEmulator";
+
 import { OnscreenControlsLRUDAB } from "./OnscreenControlsLRUDAB";
 import frannybwPng from "./frannybw.png";
 import { CardSwipe } from "./CardSwipe";
@@ -8,6 +8,16 @@ import { OnscreenControlsLR } from "./OnscreenControlsLR";
 import { Differences } from "./Differences";
 import { KeyboardControls } from "./KeyboardControls";
 import { Hinge } from "./Hinge";
+import { SoundManager as UISoundManager } from "./SoundManager";
+import {
+  loadEmuAudio,
+  loadUiAudio,
+  loadSystemBackgrounds,
+} from "./loadResources";
+
+import { EreaderEmulator } from "../../src/EreaderEmulator";
+import { SoundManager as EmuSoundManager } from "../../src/SoundManager";
+import { SystemBackgroundManager } from "../../src/SystemBackgroundManager";
 
 async function loadBinary(url: string): Promise<Uint8Array> {
   const result = await fetch(url);
@@ -16,7 +26,7 @@ async function loadBinary(url: string): Promise<Uint8Array> {
   return new Uint8Array(data);
 }
 
-type EmulationState = "ready-to-start" | "preloading" | "running" | "paused";
+type EmulationState = "preloading" | "ready-to-start" | "running" | "paused";
 
 // this is assuming the sandbox is running solitaire
 const DECK_SPRITE = 0x4766;
@@ -37,6 +47,7 @@ const keyMapping: Record<string, string> = {
 
 function Emulator() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [preloadErrorOccured, setPreloadErrorOccured] = useState(false);
   const [swipeDone, setSwipeDone] = useState(false);
   const [emulator, setEmulator] = useState<EreaderEmulator | null>(null);
   const [emulationState, setEmulationState] =
@@ -50,14 +61,23 @@ function Emulator() {
       const emulator = new EreaderEmulator(binData, canvas);
       setEmulator(emulator);
 
-      emulator
-        .preload({
-          sprites: [DECK_SPRITE],
-          customBackgrounds: [PLAYFIELD_BG],
-        })
-        .then(() => {
-          setEmulationState("ready-to-start");
-        });
+      try {
+        const uiAudio = await loadUiAudio();
+        UISoundManager.setSounds(uiAudio);
+        const emuAudio = await loadEmuAudio();
+        EmuSoundManager.setSounds(emuAudio);
+        const systemBackgrounds = await loadSystemBackgrounds();
+        SystemBackgroundManager.setBackgrounds(systemBackgrounds);
+      } catch (e) {
+        setPreloadErrorOccured(true);
+      }
+
+      await emulator.preload({
+        sprites: [DECK_SPRITE],
+        customBackgrounds: [PLAYFIELD_BG],
+      });
+
+      setEmulationState("ready-to-start");
 
       window.addEventListener("keydown", (e) => {
         const mappedKey = keyMapping[e.key];
@@ -79,7 +99,9 @@ function Emulator() {
     }
 
     if (canvasRef.current) {
-      onCanvas(canvasRef.current);
+      onCanvas(canvasRef.current).catch((e) => {
+        console.error(e);
+      });
     }
   }, []);
 
@@ -91,6 +113,11 @@ function Emulator() {
         )}
         style={{ maxWidth: 480 }}
       >
+        {preloadErrorOccured && (
+          <div className="absolute left-4 top-8 right-4 z-20 bg-red-300 border-8 border-red-600 text-black px-2 py-16">
+            An error occured. Please try refreshing the browser.
+          </div>
+        )}
         {showDifferences && (
           <Differences
             className="absolute left-0 top-0 right-0 bottom-0 z-20"
@@ -108,6 +135,7 @@ function Emulator() {
           />
         )}
         <CardSwipe
+          preloading={emulationState === "preloading" || preloadErrorOccured}
           className={clsx(
             "absolute w-full h-full top-0 left-0 bottom-0 right-0 z-10",
             {
