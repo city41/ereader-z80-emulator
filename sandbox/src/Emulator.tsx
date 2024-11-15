@@ -13,6 +13,7 @@ import {
   loadEmuAudio,
   loadUiAudio,
   loadSystemBackgrounds,
+  TOTAL_LOAD_COUNT,
 } from "./loadResources";
 
 import { EreaderEmulator } from "../../src/EreaderEmulator";
@@ -46,6 +47,7 @@ const keyMapping: Record<string, string> = {
 };
 
 function Emulator() {
+  const [loadedCount, setLoadedCount] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [preloadErrorOccured, setPreloadErrorOccured] = useState(false);
   const [swipeDone, setSwipeDone] = useState(false);
@@ -62,13 +64,20 @@ function Emulator() {
       setEmulator(emulator);
 
       try {
-        const uiAudio = await loadUiAudio();
+        const uiAudio = await loadUiAudio(() => {
+          setLoadedCount((lc) => lc + 1);
+        });
         UISoundManager.setSounds(uiAudio);
-        const emuAudio = await loadEmuAudio();
+        const emuAudio = await loadEmuAudio(() => {
+          setLoadedCount((lc) => lc + 1);
+        });
         EmuSoundManager.setSounds(emuAudio);
-        const systemBackgrounds = await loadSystemBackgrounds();
+        const systemBackgrounds = await loadSystemBackgrounds(() => {
+          setLoadedCount((lc) => lc + 1);
+        });
         SystemBackgroundManager.setBackgrounds(systemBackgrounds);
-      } catch (e) {
+      } catch {
+        debugger;
         setPreloadErrorOccured(true);
       }
 
@@ -135,7 +144,7 @@ function Emulator() {
           />
         )}
         <CardSwipe
-          preloading={emulationState === "preloading" || preloadErrorOccured}
+          loadPercent={loadedCount / TOTAL_LOAD_COUNT}
           className={clsx(
             "absolute w-full h-full top-0 left-0 bottom-0 right-0 z-10",
             {
@@ -181,7 +190,7 @@ function Emulator() {
                 GAME DOG
                 <div className="grid place-items-center">
                   <img
-                    src={frannybwPng}
+                    src={frannybwPng.src}
                     className="w-10 h-auto opacity-50"
                     style={{
                       imageRendering: "pixelated",

@@ -1,7 +1,8 @@
 import { ERAPISystemSound } from "./ERAPI/types";
+import { Howl } from "howler";
 
 class _SoundManager {
-  private sounds: Record<number, HTMLAudioElement> = {};
+  private sounds: Record<number, Howl> = {};
 
   // private stopAllSounds(type: "sfx" | "music") {
   //   Object.values(audioCache).forEach((a) => {
@@ -11,7 +12,7 @@ class _SoundManager {
   //   });
   // }
 
-  setSounds(sounds: Record<number, HTMLAudioElement>) {
+  setSounds(sounds: Record<number, Howl>) {
     this.sounds = sounds;
   }
 

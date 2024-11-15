@@ -1,5 +1,7 @@
+import { Howl } from "howler";
+
 class _SoundManager {
-  private sounds: Record<string, HTMLAudioElement> = {};
+  private sounds: Record<string, Howl> = {};
 
   // private stopAllSounds(type: "sfx" | "music") {
   //   Object.values(audioCache).forEach((a) => {
@@ -9,7 +11,7 @@ class _SoundManager {
   //   });
   // }
 
-  setSounds(sounds: Record<string, HTMLAudioElement>) {
+  setSounds(sounds: Record<string, Howl>) {
     this.sounds = sounds;
   }
 
