@@ -94,7 +94,6 @@ NOTE: the emulator is currently assuming you are running Solitaire.
 ## Known Issues
 
 - Much of ERAPI remains to be implemented
-- `halt` frames happen much faster in the emulator compared to a real GBA.
 
 # Development
 
