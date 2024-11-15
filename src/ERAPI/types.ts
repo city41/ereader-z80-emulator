@@ -70,6 +70,7 @@ export type ERAPIState = {
 
 export type ErapiApiCallHandler = {
   functionName: string;
+  frameDelay?: number;
   handle?: (
     state: Z80State,
     memory: SimulatedMemory,

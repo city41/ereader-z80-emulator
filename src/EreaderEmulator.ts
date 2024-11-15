@@ -20,6 +20,16 @@ async function wait(millis: number): Promise<void> {
 }
 
 class EreaderEmulator implements Z80Core {
+  // modern computers can often run at 120fps or more
+  // but the GBA runs at 60fps. This is used below
+  // to force RAF to be 60fps
+  get MILLIS_PER_FRAME() {
+    return 1000 / 60;
+  }
+
+  private lastFrameTS = 0;
+  private frameElapsed = 0;
+
   private game: Uint8Array;
   private z80: any;
   private erapi: ERAPI;
@@ -92,18 +102,25 @@ class EreaderEmulator implements Z80Core {
     return newState;
   }
 
-  private frame() {
-    if (this.erapi.update()) {
-      this.reset();
-      return;
+  private frame(ts: number) {
+    this.frameElapsed = ts - this.lastFrameTS;
+
+    if (this.frameElapsed > this.MILLIS_PER_FRAME) {
+      this.lastFrameTS = ts - (this.frameElapsed % this.MILLIS_PER_FRAME);
+
+      // enough time has elapsed, render a frame
+      if (this.erapi.update()) {
+        this.reset();
+        return;
+      }
+
+      renderFrame(this.canvas, this.erapi);
+      this.framesToRender -= 1;
     }
 
-    renderFrame(this.canvas, this.erapi);
-    this.framesToRender -= 1;
-
     if (this.framesToRender > 0) {
-      requestAnimationFrame(() => {
-        this.frame();
+      requestAnimationFrame((ts) => {
+        this.frame(ts);
       });
     } else {
       const state = this.z80.getState();
@@ -112,28 +129,29 @@ class EreaderEmulator implements Z80Core {
       this.z80.setState(state);
 
       if (this.emulationState === "running") {
-        requestAnimationFrame(() => {
-          this.step();
+        requestAnimationFrame((ts) => {
+          this.step(ts);
         });
       }
     }
   }
 
-  step() {
+  step(ts: number) {
     while (!this.z80.halted) {
       this.z80.run_instruction();
     }
 
-    this.framesToRender = Math.max(this.z80.getState().a, 1);
+    this.framesToRender =
+      Math.max(this.z80.getState().a, 1) + this.erapi.getFrameDelay();
 
     requestAnimationFrame(() => {
-      this.frame();
+      this.frame(ts);
     });
   }
 
   run() {
     this.emulationState = "running";
-    this.step();
+    this.step(0);
   }
 
   pause() {

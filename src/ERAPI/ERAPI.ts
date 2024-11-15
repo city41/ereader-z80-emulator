@@ -11,6 +11,8 @@ class ERAPI {
   public sprites: ERAPICustomSprite[] = [];
   public sounds: ERAPISystemSound[] = [];
 
+  private frameDelay = 0;
+
   private updateSprite(sprite: ERAPICustomSprite) {
     if (sprite.autoAnimate) {
       sprite.autoAnimate.curAnimationCount += 1;
@@ -53,6 +55,8 @@ class ERAPI {
 
     apiHandler.handle(state, memory, handleGenerator, this);
 
+    this.frameDelay += apiHandler.frameDelay ?? 0;
+
     return state;
   }
 
@@ -78,6 +82,8 @@ class ERAPI {
 
     apiHandler.handle(state, memory, handleGenerator, this);
 
+    this.frameDelay += apiHandler.frameDelay ?? 0;
+
     return state;
   }
 
@@ -100,6 +106,13 @@ class ERAPI {
     this.sprites = [];
     this.sounds = [];
     this.backgrounds = [];
+  }
+
+  getFrameDelay() {
+    const fd = this.frameDelay;
+    this.frameDelay = 0;
+
+    return fd;
   }
 }
 

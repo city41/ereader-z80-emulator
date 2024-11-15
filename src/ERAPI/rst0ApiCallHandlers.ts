@@ -77,6 +77,8 @@ const rst0ApiCallHandler: Record<number, ErapiApiCallHandler> = {
      *   (word) number of palettes
      */
     functionName: "LoadCustomBackground",
+    // this call takes 4 frames on a real GBA
+    frameDelay: 4,
     handle(state, memory, _handleGenerator, erapiState) {
       const backgroundIndex = state.a;
 
